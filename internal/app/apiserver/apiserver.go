@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"url_shortener/internal/app/generator"
 	"url_shortener/internal/store"
+	"url_shortener/internal/version"
 
 	"github.com/gorilla/mux"
 )
@@ -59,5 +60,6 @@ func (s *Server) handlerPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handlerVersion(w http.ResponseWriter, r *http.Request) {
-
+	programName, gitTag, gitCommit, gitBranch := version.Version()
+	fmt.Fprintf(w, "pragramName=%s\tgitTag=%s\tgitCommit=%s\tgitBranch=%s", programName, gitTag, gitCommit, gitBranch)
 }

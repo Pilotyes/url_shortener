@@ -1,4 +1,4 @@
-name: Github Фction
+name: Github Action
 on:
   push:
     branches:

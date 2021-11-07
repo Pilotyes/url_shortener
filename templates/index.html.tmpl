@@ -1,0 +1,39 @@
+<html>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script>
+		function GetShortLink() {
+			let longLink = document.querySelector("#longLinkInput").value
+			if (longLink == "") {
+				alert("Long link must not be empty");
+				return;
+			}
+
+			let req = {
+				longLink: longLink
+			}
+			$.ajax({
+				url: '/',
+				type: 'POST',
+				data: JSON.stringify(req),
+				dataType: "json",
+				contentType: 'application/json',
+				success: function (response) {
+					let shortLink = document.location.origin + "/" + response.shortLink;
+					document.querySelector("#newShortLink").innerHTML = shortLink;
+					document.querySelector("#newShortLink").setAttribute("href", shortLink);
+				},
+				error: function (response) {
+					document.querySelector("#newShortLink").innerHTML = response.responseText;
+				}
+			});
+		}
+	</script>
+	<form name="longLinkForm">
+		<input id="longLinkInput" placeholder="Long link" type="text"></input>
+		<input onclick=GetShortLink() type="button" value="Get short link"></input>
+	</form>
+	<div>
+		<div>Short link:</div>
+		<a id="newShortLink"></a>
+	</div>
+</html>

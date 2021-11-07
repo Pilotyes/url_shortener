@@ -9,7 +9,7 @@
  */
 package model
 
-// ErrorMessage ...
+// ErrorMessage is a ...
 type ErrorMessage struct {
 	Code int32 `json:"code,omitempty"`
 

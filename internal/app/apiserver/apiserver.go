@@ -12,6 +12,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+const (
+	shutdownTimeout = 5
+)
+
 type Server struct {
 	config     *config.MainConfig
 	generator  *generator.Generator
@@ -20,12 +24,12 @@ type Server struct {
 	store      store.Store
 }
 
-func New(inStore store.Store, config *config.MainConfig) *Server {
-	generator := generator.New(inStore)
+func New(inStore store.Store, inConfig *config.MainConfig) *Server {
+	newGenerator := generator.New(inStore)
 
 	server := &Server{
-		config:    config,
-		generator: generator,
+		config:    inConfig,
+		generator: newGenerator,
 		store:     inStore,
 	}
 
@@ -33,7 +37,7 @@ func New(inStore store.Store, config *config.MainConfig) *Server {
 	server.router = router
 
 	httpServer := &http.Server{
-		Addr:    config.BindAddr,
+		Addr:    inConfig.BindAddr,
 		Handler: router,
 	}
 	server.httpServer = httpServer
@@ -55,12 +59,11 @@ func (s *Server) Start(ctx context.Context) error {
 
 	log.Printf("URL shortener server stopped")
 
-	ctxShutDown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer func() {
-		cancel()
-	}()
+	ctxShutDown, cancel := context.WithTimeout(context.Background(), shutdownTimeout*time.Second)
+	defer cancel()
 
-	if err = s.httpServer.Shutdown(ctxShutDown); err != nil {
+	err = s.httpServer.Shutdown(ctxShutDown)
+	if err != nil {
 		return err
 	}
 

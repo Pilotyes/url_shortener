@@ -9,7 +9,7 @@
  */
 package model
 
-// LongLinkResponse ...
+// LongLinkResponse is ...
 type LongLinkResponse struct {
 	LongLink string `json:"longLink,omitempty"`
 }

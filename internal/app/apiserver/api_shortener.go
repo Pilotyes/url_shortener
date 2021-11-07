@@ -33,7 +33,7 @@ func (s *Server) createShortLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.LongLink != "" && !isUrl(req.LongLink) {
+	if req.LongLink != "" && !isURL(req.LongLink) {
 		sendError(w, http.StatusBadRequest, errors.New("long link is not url"))
 		return
 	}
@@ -117,5 +117,5 @@ func sendError(w http.ResponseWriter, code int, err error) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(code)
-	w.Write(data)
+	_, _ = w.Write(data)
 }

@@ -9,7 +9,7 @@
  */
 package model
 
-// ShortLinkResponse ...
+// ShortLinkResponse is ...
 type ShortLinkResponse struct {
 	ShortLink string `json:"shortLink,omitempty"`
 }
